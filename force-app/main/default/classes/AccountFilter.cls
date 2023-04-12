@@ -3,6 +3,8 @@
  */
 
 public  class AccountFilter {
+
+    private Decimal ANNUAL_REVENUE = 1.000000;
     public List<Account> filterByChangedDocumentNumber(List<Account> newAccounts, Map<Id,Account> oldAccounts){
 
         List<Account> filteredAccounts = new List<Account>();
@@ -52,5 +54,26 @@ public  class AccountFilter {
         }
 
         return groupedAccount;
+    }
+
+    public List<Account> filterByClientPremium(List<Account> newAccounts, Map<Id,Account> oldAccounts) {
+
+        List<Account> filteredAccounts = new List<Account>();
+
+        for ( Account newAccount : newAccounts ){
+
+            if (oldAccounts == null || oldAccounts.isEmpty()) {
+                filteredAccounts.add(newAccount);
+                continue;
+            }
+            
+            Account oldAccount = oldAccounts.get(newAccount.Id);
+
+            if (oldAccount != null && (oldAccount.Category__c == 'Premium' && oldAccount.AnnualRevenue > ANNUAL_REVENUE )) {
+                filteredAccounts.add(newAccount);
+            }
+        }
+
+        return filteredAccounts;
     }
 }

@@ -11,6 +11,8 @@ public with sharing class AccountTH extends TriggerHandler {
     AccountFilter filter;
     AccountValidator validator;
     AccountEnricher enricher;
+    EventEnricher eventEnricher;
+
 
 
     public AccountTH() {
@@ -20,6 +22,7 @@ public with sharing class AccountTH extends TriggerHandler {
         this.filter = new AccountFilter();
         this.validator = new AccountValidator();
         this.enricher = new AccountEnricher();
+        this.eventEnricher = new EventEnricher();
     }
 
     public AccountTH(List<Account> newAccounts, Map<Id,Account> oldAccounts) {
@@ -34,12 +37,14 @@ public with sharing class AccountTH extends TriggerHandler {
         //Somente Metodo 
         validateDocumentNumber();
         enricherAccounts();
+        enricherAccountsForPremium();
     }
 
     override
     public void beforeUpdate() {
         validateDocumentNumber();
         enricherAccounts();
+        enricherAccountsForPremium();
     }
 
     override
@@ -61,5 +66,11 @@ public with sharing class AccountTH extends TriggerHandler {
 
     public void enricherAccounts() {
         enricher.enrichWithFormatedDocumentNumber(newAccounts);
+    }
+
+    public void enricherAccountsForPremium() {
+        List<Account> filterAccounts = filter.filterByClientPremium(newAccounts, oldAccounts);
+
+        eventEnricher.enrichEventForClientPremiunAndAnnualRevanueOneMillion(filterAccounts);
     }
 }
