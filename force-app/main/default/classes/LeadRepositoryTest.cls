@@ -14,7 +14,6 @@ public  class LeadRepositoryTest {
 
         LeadRepository repository = new LeadRepository();
 
-
         List<Lead> leads = repository.findByLastName(lead.LastName);
 
         System.assertEquals(city.Id, leads.get(0).City__c);
