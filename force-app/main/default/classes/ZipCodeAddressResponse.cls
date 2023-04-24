@@ -15,4 +15,10 @@ public class ZipCodeAddressResponse {
     public String ddd;
     public String siafi;
 
+
+    public static ZipCodeAddressResponse fromJson(String payload) {
+        return (ZipCodeAddressResponse) JSON.deserialize(payload, ZipCodeAddressResponse.class);
+    }
 }
+
+

@@ -38,7 +38,7 @@ public class ZipCodeAddresOutboundService {
 
         if (response.getStatusCode() != 200) return null;
 
-        return (ZipCodeAddressResponse) JSON.deserialize(response.getBody(), ZipCodeAddressResponse.class);
+        return ZipCodeAddressResponse.fromJson(response.getBody());
 
 
     }
